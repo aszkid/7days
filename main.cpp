@@ -7,9 +7,6 @@
 #include <SFML/Graphics.hpp>
 
 using json = nlohmann::json;
-using std::cout;
-using std::cerr;
-using std::endl;
 
 int main(int argc, char** argv)
 {
@@ -37,8 +34,6 @@ int main(int argc, char** argv)
 	}
 
 	sf::RenderWindow window(sf::VideoMode(s_width, s_height), "7 Days of Doom");
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
 
 	sf::Text text;
 	text.setFont(font);
@@ -46,6 +41,20 @@ int main(int argc, char** argv)
 	text.setCharacterSize(24);
 	text.setFillColor(sf::Color::White);
 	text.setPosition(200.f, 200.f);
+
+	sf::Texture texture;
+	if (!texture.loadFromFile(prefix + "tiles/grid_w.png")) {
+		console->error("Failed to open texture file!");
+		return 1;
+	}
+	
+	texture.setSmooth(false);
+	texture.setRepeated(true);
+
+	sf::Sprite sprite;
+	sprite.setTexture(texture);
+	sprite.setTextureRect({0, 0, s_width, s_height});
+	sprite.setColor(sf::Color(255, 255, 255, 64));
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -55,8 +64,8 @@ int main(int argc, char** argv)
 		}
 
 		window.clear();
-		window.draw(shape);
-		window.draw(text);
+		window.draw(sprite);
+		//window.draw(text);
 		window.display();
 	}
 
