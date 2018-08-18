@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_sinks.h>
 #include <nlohmann/json.hpp>
 #include <SFML/Graphics.hpp>
 
@@ -11,11 +13,15 @@ using std::endl;
 
 int main(int argc, char** argv)
 {
+	std::cout << "\n=======================================\n";
+	auto console = spdlog::stdout_logger_mt("console");
+	console->info("7 Days of Doom");
+
 	const std::string prefix = "../run/";
 
 	std::ifstream infile(prefix + "config.json");
 	if (!infile) {
-		cerr << "Failed to open config file!" << endl;
+		console->error("Failed to open config file!");
 		return 1;
 	}
 
@@ -26,7 +32,7 @@ int main(int argc, char** argv)
 
 	sf::Font font;
 	if (!font.loadFromFile(prefix + "fonts/Roboto/Roboto-Regular.ttf")) {
-		cerr << "Failed to open font file!" << endl;
+		console->error("Failed to open font file!");
 		return 1;
 	}
 
