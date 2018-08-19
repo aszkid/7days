@@ -37,8 +37,8 @@ int main(int argc, char** argv)
 
 	sf::RenderWindow window(sf::VideoMode(s_width, s_height), "7 Days of Doom");
 
-		sf::Texture texture;
-	if (!texture.loadFromFile(prefix + "tiles/grid_w.png")) {
+	sf::Texture texture;
+	if (!texture.loadFromFile(prefix + "tiles/grass3.png")) {
 		console->error("Failed to open texture file!");
 		return 1;
 	}
@@ -49,17 +49,12 @@ int main(int argc, char** argv)
 	sf::Sprite sprite;
 	sprite.setTexture(texture);
 	sprite.setTextureRect({0, 0, s_width, s_height});
-	sprite.setColor(sf::Color(255, 255, 255, 64));
-
-
-	sf::RectangleShape button(sf::Vector2f(192, 48));
-	button.setFillColor(sf::Color(125, 125, 125));
-
+	sprite.setColor(sf::Color(255, 255, 255, 255));
 
 	sf::View view;
 	view.setSize(sf::Vector2f(1280, 720));
 	view.setCenter(sf::Vector2f(640, 360));
-	view.rotate(25);
+	view.zoom(0.25f);
 	window.setView(view);
 
 	sf::Text text;
@@ -70,15 +65,47 @@ int main(int argc, char** argv)
 	text.setFillColor(sf::Color::White);
 	text.setPosition(16.f, 688.f);
 
-
 	sf::View defView = window.getDefaultView();
+	
+	sf::Clock clock;
+	sf::Time delta;
+	float delta_m;
+	const float spd = 5.f;
 
 	while (window.isOpen()) {
+		delta = clock.restart();
+		delta_m = delta.asMilliseconds();
+		text.setString(fmt::format("({:.2f}, {:.2f}) | {}ms",
+			view.getCenter().x, view.getCenter().y,
+			delta_m
+		));
+
 		sf::Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+			view.rotate(360.f * (delta_m / 5000.f));
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+			view.move(spd * 16.f * (delta_m / 500.f), 0.f);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+			view.move(-spd * 16.f * (delta_m / 500.f), 0.f);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+			view.move(0.f, -spd * 16.f * (delta_m / 500.f));
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+			view.move(0.f, spd * 16.f * (delta_m / 500.f));
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
+			//view.move(0.f, spd * 16.f * (delta_m / 500.f));
+			view.zoom(0.25f * (delta_m / 1000.f));
+		}
+
 
 		window.clear();
 
@@ -88,11 +115,12 @@ int main(int argc, char** argv)
 
 		// draw gui
 		window.setView(defView);
-		window.draw(button);
 		window.draw(text);
 
 		window.display();
+		sf::sleep(sf::milliseconds(5));
 	}
 
 	return 0;
 }
+
