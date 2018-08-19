@@ -5,6 +5,8 @@
 #include <spdlog/sinks/stdout_sinks.h>
 #include <nlohmann/json.hpp>
 #include <SFML/Graphics.hpp>
+#define FMT_HEADER_ONLY
+#include <fmt/format.h>
 
 using json = nlohmann::json;
 
@@ -35,14 +37,7 @@ int main(int argc, char** argv)
 
 	sf::RenderWindow window(sf::VideoMode(s_width, s_height), "7 Days of Doom");
 
-	sf::Text text;
-	text.setFont(font);
-	text.setString("7 Days of Doom");
-	text.setCharacterSize(24);
-	text.setFillColor(sf::Color::White);
-	text.setPosition(200.f, 200.f);
-
-	sf::Texture texture;
+		sf::Texture texture;
 	if (!texture.loadFromFile(prefix + "tiles/grid_w.png")) {
 		console->error("Failed to open texture file!");
 		return 1;
@@ -56,6 +51,28 @@ int main(int argc, char** argv)
 	sprite.setTextureRect({0, 0, s_width, s_height});
 	sprite.setColor(sf::Color(255, 255, 255, 64));
 
+
+	sf::RectangleShape button(sf::Vector2f(192, 48));
+	button.setFillColor(sf::Color(125, 125, 125));
+
+
+	sf::View view;
+	view.setSize(sf::Vector2f(1280, 720));
+	view.setCenter(sf::Vector2f(640, 360));
+	view.rotate(25);
+	window.setView(view);
+
+	sf::Text text;
+	text.setFont(font);
+
+	text.setString(fmt::format("({}, {})", 110, 78));
+	text.setCharacterSize(16);
+	text.setFillColor(sf::Color::White);
+	text.setPosition(16.f, 688.f);
+
+
+	sf::View defView = window.getDefaultView();
+
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -64,8 +81,16 @@ int main(int argc, char** argv)
 		}
 
 		window.clear();
+
+		// draw world
+		window.setView(view);
 		window.draw(sprite);
-		//window.draw(text);
+
+		// draw gui
+		window.setView(defView);
+		window.draw(button);
+		window.draw(text);
+
 		window.display();
 	}
 
