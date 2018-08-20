@@ -8,6 +8,8 @@
 #define FMT_HEADER_ONLY
 #include <fmt/format.h>
 
+#include "tilemap.h"
+
 using json = nlohmann::json;
 
 int main(int argc, char** argv)
@@ -54,7 +56,6 @@ int main(int argc, char** argv)
 	sf::View view;
 	view.setSize(sf::Vector2f(1280, 720));
 	view.setCenter(sf::Vector2f(640, 360));
-	view.zoom(0.25f);
 	window.setView(view);
 
 	sf::Text text;
@@ -71,6 +72,8 @@ int main(int argc, char** argv)
 	sf::Time delta;
 	float delta_m;
 	const float spd = 5.f;
+
+	TileMap map;
 
 	while (window.isOpen()) {
 		delta = clock.restart();
@@ -106,12 +109,12 @@ int main(int argc, char** argv)
 			view.zoom(0.25f * (delta_m / 1000.f));
 		}
 
-
 		window.clear();
 
 		// draw world
 		window.setView(view);
-		window.draw(sprite);
+		//window.draw(sprite);
+		window.draw(map);
 
 		// draw gui
 		window.setView(defView);
