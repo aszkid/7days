@@ -1,0 +1,11 @@
+{
+	"size" : 16,
+	"tiles" : [
+		{
+			"name" : "grass"
+		},
+		{
+			"name" : "sand"
+		}
+	]
+}
