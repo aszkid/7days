@@ -44,7 +44,13 @@ int main(int argc, char** argv)
 		console->error("Failed to open texture file!");
 		return 1;
 	}
-	
+
+	sf::Texture tset;
+        if (!tset.loadFromFile(prefix + "tileset.png")) {
+                console->error("Failed to open texture file!");
+                return 1;
+        }
+
 	texture.setSmooth(false);
 	texture.setRepeated(true);
 
@@ -73,56 +79,58 @@ int main(int argc, char** argv)
 	float delta_m;
 	const float spd = 5.f;
 
-	TileMap map;
+	mapa = new TileMap(tset, 10, 10, 16.0f, 32.0f);
 
-	while (window.isOpen()) {
-		delta = clock.restart();
-		delta_m = delta.asMilliseconds();
-		text.setString(fmt::format("({:.2f}, {:.2f}) | {}ms",
-			view.getCenter().x, view.getCenter().y,
-			delta_m
-		));
+	window.draw(mapa);
 
-		sf::Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
-			view.rotate(360.f * (delta_m / 5000.f));
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-			view.move(spd * 16.f * (delta_m / 500.f), 0.f);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-			view.move(-spd * 16.f * (delta_m / 500.f), 0.f);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-			view.move(0.f, -spd * 16.f * (delta_m / 500.f));
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-			view.move(0.f, spd * 16.f * (delta_m / 500.f));
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
-			//view.move(0.f, spd * 16.f * (delta_m / 500.f));
-			view.zoom(0.25f * (delta_m / 1000.f));
-		}
-
-		window.clear();
-
-		// draw world
-		window.setView(view);
-		//window.draw(sprite);
-		window.draw(map);
-
-		// draw gui
-		window.setView(defView);
-		window.draw(text);
-
-		window.display();
-		sf::sleep(sf::milliseconds(5));
-	}
+// 	while (window.isOpen()) {
+// 		delta = clock.restart();
+// 		delta_m = delta.asMilliseconds();
+// 		text.setString(fmt::format("({:.2f}, {:.2f}) | {}ms",
+// 			view.getCenter().x, view.getCenter().y,
+// 			delta_m
+// 		));
+// 
+// 		sf::Event event;
+// 		while (window.pollEvent(event)) {
+// 			if (event.type == sf::Event::Closed)
+// 				window.close();
+// 		}
+// 
+// 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+// 			view.rotate(360.f * (delta_m / 5000.f));
+// 		}
+// 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+// 			view.move(spd * 16.f * (delta_m / 500.f), 0.f);
+// 		}
+// 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+// 			view.move(-spd * 16.f * (delta_m / 500.f), 0.f);
+// 		}
+// 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+// 			view.move(0.f, -spd * 16.f * (delta_m / 500.f));
+// 		}
+// 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+// 			view.move(0.f, spd * 16.f * (delta_m / 500.f));
+// 		}
+// 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
+// 			//view.move(0.f, spd * 16.f * (delta_m / 500.f));
+// 			view.zoom(0.25f * (delta_m / 1000.f));
+// 		}
+// 
+// 		window.clear();
+// 
+// 		// draw world
+// 		window.setView(view);
+// 		window.draw(sprite);
+// 		window.draw(map);
+// 
+// 		// draw gui
+// 		window.setView(defView);
+// 		window.draw(text);
+// 
+// 		window.display();
+// 		sf::sleep(sf::milliseconds(5));
+// 	}
 
 	return 0;
 }
