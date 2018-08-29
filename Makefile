@@ -1,4 +1,4 @@
-sfml_dir = /home/aszkid/dev/sfml/2.5.0
+sfml_dir = /home/oriol/sfml1/sfml
 sfml_libs = -lsfml-graphics -lsfml-window -lsfml-system
 json_dir = $(CURDIR)/ext/nlohmann-json-3.1.2
 spdlog_dir = $(CURDIR)/ext/spdlog-1.1.0

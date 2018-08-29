@@ -44,7 +44,13 @@ int main(int argc, char** argv)
 		console->error("Failed to open texture file!");
 		return 1;
 	}
-	
+
+	sf::Texture tset;
+        if (!tset.loadFromFile(prefix + "tileset.png")) {
+                console->error("Failed to open tileset file!");
+                return 1;
+        }
+
 	texture.setSmooth(false);
 	texture.setRepeated(true);
 
@@ -73,7 +79,19 @@ int main(int argc, char** argv)
 	float delta_m;
 	const float spd = 5.f;
 
-	TileMap map;
+        //Per probar que carrega el texture set be
+        
+        int level[8*12];
+        
+        for(int i = 0; i < 8*12; i++)
+        {
+            level[i]=(8*12)-i;
+        }
+
+        tilemap mapa;
+        mapa.build(tset, 12, 8, sf::Vector2f(16,16), level);
+
+        window.draw(mapa);
 
 	while (window.isOpen()) {
 		delta = clock.restart();
@@ -113,8 +131,7 @@ int main(int argc, char** argv)
 
 		// draw world
 		window.setView(view);
-		//window.draw(sprite);
-		window.draw(map);
+		window.draw(mapa);
 
 		// draw gui
 		window.setView(defView);
