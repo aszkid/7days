@@ -85,7 +85,7 @@ int main(int argc, char** argv)
         
         for(int i = 0; i < 8*12; i++)
         {
-            level[i]=(8*12)-i;
+            level[i]=i;
         }
 
         tilemap mapa;
