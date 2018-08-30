@@ -9,13 +9,13 @@ before_install:
 
 install: 
   # install g++-5
-  - sudo apt-get install -qq g++-5 cmake
+  - sudo apt-get install -qq g++-5 cmake unzip
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
   # install deps
   - sudo apt-get install -qq libpthread-stubs0-dev libgl1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew1.5-dev libjpeg8-dev libsndfile1-dev libopenal-dev
   # download sfml-2.5.0 source code
-  - wget https://www.sfml-dev.org/files/SFML-2.5.0-sources.zip -O /tmp/sfml.tar.bz2
-  - tar -xjvf /tmp/sfml.tar.bz2
+  - wget https://www.sfml-dev.org/files/SFML-2.5.0-sources.zip -O /tmp/sfml.zip
+  - unzip /tmp/sfml.zip
   - cd SFML-2.5.0
   - mkdir build && cd build && cmake ../
   - make
