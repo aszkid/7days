@@ -1,4 +1,5 @@
 # 7days
+[![Build Status](https://travis-ci.com/aszkid/7days.svg?token=9ZEmBfsVntWTpozGw8zE&branch=travis)](https://travis-ci.com/aszkid/7days)
 ## (1) Requirements
 *7days* requires
 - `SFML` >=2.5.0 for everything,
