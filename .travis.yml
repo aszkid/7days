@@ -3,15 +3,23 @@ compiler: gcc
 dist: trusty
 
 before_install:
-  # C++11
+  # download up-to-date toolchain
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo apt-get update -qq
 
 install: 
-  # C++11
-  - sudo apt-get install -qq g++-5
+  # install g++-5
+  - sudo apt-get install -qq g++-5 cmake
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
-  - sudo apt-get install libsfml-dev
+  # install deps
+  - sudo apt-get install -qq libpthread-stubs0-dev libgl1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew1.5-dev libjpeg8-dev libsndfile1-dev libopenal-dev
+  # download sfml-2.5.0 source code
+  - wget https://www.sfml-dev.org/files/SFML-2.5.0-sources.zip -O /tmp/sfml.tar.bz2
+  - tar -xjvf /tmp/sfml.tar.bz2
+  - cd SFML-2.5.0
+  - mkdir build && cd build && cmake ../
+  - make
+  - sudo make install
 
 script:
   - ./configure
