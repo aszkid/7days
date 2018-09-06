@@ -4,7 +4,7 @@ json_dir = $(CURDIR)/ext/nlohmann-json-3.1.2
 spdlog_dir = $(CURDIR)/ext/spdlog-1.1.0
 fmt_dir = $(CURDIR)/ext/fmt-5.1.0
 
-.PHONY: clean
+.PHONY: clean format
 all: build/7days
 build/7days: src/main.cpp src/tilemap.cpp
 	mkdir -p build
@@ -15,4 +15,5 @@ run: build/7days
 	  LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(sfml_dir)/lib ./7days
 clean:
 	rm -f -r build
-
+format:
+	clang-format -i `find src -name '*.cpp'`
