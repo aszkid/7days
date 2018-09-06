@@ -3,12 +3,13 @@ sfml_libs = -lsfml-graphics -lsfml-window -lsfml-system
 json_dir = $(CURDIR)/ext/nlohmann-json-3.1.2
 spdlog_dir = $(CURDIR)/ext/spdlog-1.1.0
 fmt_dir = $(CURDIR)/ext/fmt-5.1.0
+apathy_dir = $(CURDIR)/ext/apathy
 
 .PHONY: clean format
 all: build/7days
-build/7days: src/main.cpp src/tilemap.cpp
+build/7days: src/main.cpp src/tilemap.cpp src/map.cpp
 	mkdir -p build
-	g++ $^ -o $@ -Wall -std=c++11 -I$(CURDIR)/include -I$(sfml_dir)/include -I$(json_dir)/include -I$(spdlog_dir)/include -I$(fmt_dir)/include -L$(sfml_dir)/lib $(sfml_libs)
+	g++ $^ -o $@ -Wall -std=c++11 -I$(CURDIR)/include -I$(sfml_dir)/include -I$(json_dir)/include -I$(spdlog_dir)/include -I$(fmt_dir)/include -I$(apathy_dir) -L$(sfml_dir)/lib $(sfml_libs)
 	chmod +x $@
 run: build/7days
 	cd build; \
