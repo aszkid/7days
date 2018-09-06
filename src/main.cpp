@@ -91,11 +91,17 @@ int main(int argc, char **argv)
 	TileMap mapa;
 	mapa.build(tset, 12, 8, sf::Vector2f(16, 16), level);
 
-	// Map
+	// Load map -- simple raw data
 	//
 	Map map;
 	if (!Map::from_json(&map, prefix + "avalon/", "better_map.json"))
 		return 1;
+
+	// Create graphics representation
+	//
+	std::vector<sf::VertexArray> varrs;
+	Map::build_verts(&map, &varrs);
+	console->info("Built {} varrs", varrs.size());
 
 	while (window.isOpen()) {
 		delta = clock.restart();
@@ -136,6 +142,12 @@ int main(int argc, char **argv)
 		window.setView(view);
 		window.draw(sprite);
 		window.draw(mapa);
+
+		// draw real map
+		//
+		for (const auto& varr : varrs) {
+			window.draw(varr, &map.tile_set);
+		}
 
 		// draw gui
 		window.setView(defView);

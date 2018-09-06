@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/VertexArray.hpp>
 
 struct CollisionRect {
 	sf::Vector2f size;
@@ -33,5 +34,6 @@ struct Map {
 	 * API
 	 */
 	static bool from_json(Map* map, const std::string prefix, const std::string file);
+	static void build_verts(const Map *map, std::vector<sf::VertexArray> *varrs);
 };
 

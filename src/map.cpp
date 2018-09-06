@@ -121,3 +121,63 @@ bool Map::from_json(Map *m, const std::string prefix, const std::string file)
 
 	return true;
 }
+
+void Map::build_verts(const Map *map, std::vector<sf::VertexArray>* varrs)
+{
+	const size_t tex_w = map->tile_set.getSize().x;
+
+	for (const auto& l : map->tile_layers) {
+		varrs->emplace_back(sf::Quads, 4 * map->width * map->height);
+		auto& varr = varrs->back();
+
+		for (size_t i = 0; i < map->width; i++) {
+			for (size_t j = 0; j < map->height; j++) {
+				/*
+				 * Vertex coords
+				 */
+				sf::Vertex *quad = &varr[(i + j * map->width) * 4];
+
+				quad[0].position =
+					sf::Vector2f(i * map->tile_size, j * map->tile_size);
+				quad[1].position =
+					sf::Vector2f((i + 1) * map->tile_size, j * map->tile_size);
+				quad[2].position = sf::Vector2f((i + 1) * map->tile_size,
+								(j + 1) * map->tile_size);
+				quad[3].position =
+					sf::Vector2f(i * map->tile_size, (j + 1) * map->tile_size);
+				
+				/*
+				 * Fetch texture coords
+				 */
+				size_t n_tile = l.data[i + j * map->width];
+				if (n_tile == 0) {
+					// Empty tile -- use (0,0) texture, should be empty!
+					// 
+					quad[0].texCoords = sf::Vector2f(0, 0);
+					quad[1].texCoords = sf::Vector2f(map->tile_size, 0);
+					quad[2].texCoords = sf::Vector2f(map->tile_size, map->tile_size);
+					quad[3].texCoords = sf::Vector2f(0, map->tile_size);
+					continue;
+				}
+
+				// Fix indexing offset
+				//
+				n_tile -= 1;
+
+				int a = tex_w / map->tile_size;
+				int tu = n_tile % (a);
+				int tv = n_tile / (tex_w / map->tile_size);
+
+				//Agafa la textura del tile set
+				quad[0].texCoords =
+					sf::Vector2f(tu * map->tile_size, tv * map->tile_size);
+				quad[1].texCoords = sf::Vector2f((tu + 1) * map->tile_size,
+								 tv * map->tile_size);
+				quad[2].texCoords = sf::Vector2f((tu + 1) * map->tile_size,
+								 (tv + 1) * map->tile_size);
+				quad[3].texCoords = sf::Vector2f(tu * map->tile_size,
+								 (tv + 1) * map->tile_size);
+			}
+		}
+	}
+}
