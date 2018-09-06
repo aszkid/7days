@@ -8,7 +8,6 @@
 #define FMT_HEADER_ONLY
 #include <fmt/format.h>
 
-#include "tilemap.h"
 #include "map.h"
 
 using json = nlohmann::json;
@@ -41,26 +40,6 @@ int main(int argc, char **argv)
 	sf::RenderWindow window(sf::VideoMode(s_width, s_height),
 				"7 Days of Doom");
 
-	sf::Texture texture;
-	if (!texture.loadFromFile(prefix + "tiles/grass3.png")) {
-		console->error("Failed to open texture file!");
-		return 1;
-	}
-
-	sf::Texture tset;
-	if (!tset.loadFromFile(prefix + "tileset.png")) {
-		console->error("Failed to open texture file!");
-		return 1;
-	}
-
-	texture.setSmooth(false);
-	texture.setRepeated(true);
-
-	sf::Sprite sprite;
-	sprite.setTexture(texture);
-	sprite.setTextureRect({ 0, 0, s_width, s_height });
-	sprite.setColor(sf::Color(255, 255, 255, 255));
-
 	sf::View view;
 	view.setSize(sf::Vector2f(1280, 720));
 	view.setCenter(sf::Vector2f(640, 360));
@@ -80,16 +59,6 @@ int main(int argc, char **argv)
 	sf::Time delta;
 	float delta_m;
 	const float spd = 5.f;
-
-	// Loading tilemap
-	//
-	int level[8 * 12];
-	for (int i = 0; i < 8 * 12; i++) {
-		level[i] = i;
-	}
-
-	TileMap mapa;
-	mapa.build(tset, 12, 8, sf::Vector2f(16, 16), level);
 
 	// Load map -- simple raw data
 	//
@@ -138,21 +107,27 @@ int main(int argc, char **argv)
 
 		window.clear();
 
-		// draw world
+		/*
+		 * Set world view
+		 */
 		window.setView(view);
-		window.draw(sprite);
-		window.draw(mapa);
 
-		// draw real map
-		//
-		for (const auto& varr : varrs) {
+		/*
+		 * Draw tilemap
+		 */
+		for (const auto &varr : varrs) {
 			window.draw(varr, &map.tile_set);
 		}
 
-		// draw gui
+		/*
+		 * Draw gui
+		 */
 		window.setView(defView);
 		window.draw(text);
 
+		/*
+		 * Flip buffers
+		 */
 		window.display();
 		sf::sleep(sf::milliseconds(5));
 	}
