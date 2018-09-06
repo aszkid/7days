@@ -15,9 +15,7 @@ struct TileLayer {
 	std::vector<uint32_t> data;
 	std::string name;
 
-	enum Type {
-		GROUND, OBJECT
-	};
+	enum Type { GROUND, OBJECT };
 	Type type;
 };
 
@@ -33,7 +31,8 @@ struct Map {
 	/*
 	 * API
 	 */
-	static bool from_json(Map* map, const std::string prefix, const std::string file);
-	static void build_verts(const Map *map, std::vector<sf::VertexArray> *varrs);
+	static bool from_json(Map *map, const std::string prefix,
+			      const std::string file);
+	static void build_verts(const Map *map,
+				std::vector<sf::VertexArray> *varrs);
 };
-
