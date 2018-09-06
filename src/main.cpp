@@ -79,7 +79,15 @@ int main(int argc, char** argv)
 	float delta_m;
 	const float spd = 5.f;
 
-	mapa = new TileMap(tset, 10, 10, 16.0f, 32.0f);
+	// Loading tilemap
+	//
+	int level[8 * 12];
+	for (int i = 0; i < 8 * 12; i++) {
+		level[i] = i;
+	}
+
+	TileMap mapa;
+	mapa.build(tset, 12, 8, sf::Vector2f(16, 16), level);
 
 	window.draw(mapa);
 
@@ -131,6 +139,7 @@ int main(int argc, char** argv)
 // 		window.display();
 // 		sf::sleep(sf::milliseconds(5));
 // 	}
+// 	
 
 	return 0;
 }

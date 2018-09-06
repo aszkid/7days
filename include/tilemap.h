@@ -6,20 +6,15 @@
 class TileMap : public sf::Drawable, public sf::Transformable
 {
 public:
-	bool load(const std::string& tex, const std::vector<uint8_t>* tiles);
-	TileMap(sf::Texture m_texture, float width, float height, float t_textures, float t_world);	// Crea TileMap
+	void build(sf::Texture set, size_t h, size_t w, sf::Vector2f st, const int* tiles);
 	virtual void draw(sf::RenderTarget& t, sf::RenderStates states) const;
 
 private:
-	sf::Texture m_texture; 		// Texture set
-	sf::VertexArray m_verts; 	// Array de tots els vertexs
+	sf::Texture m_tset; // Texture set
+	sf::VertexArray m_verts; // Array de tots els vertexs
 
-	float width;			// Textures de llarg del mapa
-	float height;		
-	float t_textures;		// Nombre pixels textura
-	float t_world;			// No se encara que fot ben be
-	
-	void addTileVertex(Tile tile, sf::Vector2f position);
-	
+	size_t m_width; // Textures de llarg del mapa
+	size_t m_height;
+	sf::Vector2f m_stex;
 };
 
