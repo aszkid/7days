@@ -46,11 +46,11 @@
          "opacity":1,
          "properties":
             {
-             "objects":true
+             "object":true
             },
          "propertytypes":
             {
-             "objects":"bool"
+             "object":"bool"
             },
          "type":"tilelayer",
          "visible":true,

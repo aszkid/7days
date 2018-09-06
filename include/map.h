@@ -5,19 +5,19 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-enum LayerType {
-	GROUND, OBJECTS
-};
-
 struct CollisionRect {
 	sf::Vector2f size;
 	sf::Vector2f pos;
 };
 
 struct TileLayer {
-	std::vector<size_t> tiles;
+	std::vector<uint32_t> data;
 	std::string name;
-	LayerType type;
+
+	enum Type {
+		GROUND, OBJECT
+	};
+	Type type;
 };
 
 struct Map {

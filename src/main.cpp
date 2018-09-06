@@ -91,16 +91,12 @@ int main(int argc, char **argv)
 	TileMap mapa;
 	mapa.build(tset, 12, 8, sf::Vector2f(16, 16), level);
 
-
-
 	// Map
 	//
 	Map map;
 	if (!Map::from_json(&map, prefix + "avalon/", "better_map.json"))
 		return 1;
 
-
-	
 	while (window.isOpen()) {
 		delta = clock.restart();
 		delta_m = delta.asMilliseconds();

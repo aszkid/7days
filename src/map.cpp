@@ -6,9 +6,68 @@
 
 using nlohmann::json;
 
+bool load_layer(Map *m, const json &j)
+{
+	auto log = spdlog::get("console");
 
+	const std::string name = j["name"];
+	log->info("Parsing layer {}", name);
 
-bool Map::from_json(Map* m, const std::string prefix, const std::string file)
+	if (j["type"] == "tilelayer") {
+		TileLayer layer;
+		const auto& props = j["properties"];
+
+		if (props.count("object") == 1 &&
+		    props["object"] == true) {
+			layer.type = TileLayer::Type::OBJECT;
+
+		} else if (props.count("ground") == 1 &&
+		           props["ground"] == true) {
+			layer.type = TileLayer::Type::GROUND;
+		} else {
+			log->warn("Unknown tile layer");
+		}
+
+		/*
+		 * Load data
+		 */
+		log->info("Loading layer data...");
+
+		layer.name = j["name"];
+		size_t w = j["width"];
+		size_t h = j["height"];
+
+		layer.data.reserve(w * h);
+		std::vector<uint32_t> data = j["data"];
+		layer.data = std::move(data);
+
+		/*
+		 * Push layer
+		 */
+		m->tile_layers.push_back(layer);
+
+	} else if (j["type"] == "objectgroup") {
+		/*
+		 * Dealing with object layer
+		 */
+		m->collision_rects.reserve(j["objects"].size());
+		for (const auto &obj : j["objects"]) {
+			sf::Vector2f pos, sz;
+			sz.x = obj["width"];
+			sz.y = obj["height"];
+			pos.x = obj["x"];
+			pos.y = obj["y"];
+			m->collision_rects.push_back({ sz, pos });
+		}
+
+	} else {
+		log->warn("Unknown layer");
+	}
+
+	return true;
+}
+
+bool Map::from_json(Map *m, const std::string prefix, const std::string file)
 {
 	auto log = spdlog::get("console");
 
@@ -33,7 +92,6 @@ bool Map::from_json(Map* m, const std::string prefix, const std::string file)
 		return false;
 	}
 
-
 	/*
 	 * Tile set
 	 */
@@ -49,7 +107,17 @@ bool Map::from_json(Map* m, const std::string prefix, const std::string file)
 		return false;
 	}
 
+	/*
+	 * Map layers
+	 */
+	for (const auto &layer : j["layers"]) {
+		log->info("Extracting layer...");
 
+		if (!load_layer(m, layer)) {
+			log->error("Failed to load layer");
+			return false;
+		}
+	}
 
 	return true;
 }
