@@ -3,15 +3,17 @@
 
 #include "jdm/path.h"
 
-namespace jdm {
-	std::ostream &operator << (std::ostream &os, path const &value)
-	{
-		os << value.str();
-		return os;
-	}
+namespace jdm
+{
+std::ostream &operator<<(std::ostream &os, path const &value)
+{
+	os << value.str();
+	return os;
+}
 }
 
-TEST_CASE("`path` with relative paths", "[path]") {
+TEST_CASE("`path` with relative paths", "[path]")
+{
 	using namespace jdm;
 
 	REQUIRE(path() == path(""));
@@ -22,19 +24,25 @@ TEST_CASE("`path` with relative paths", "[path]") {
 	REQUIRE(path("media/vids") == path("media/vids").cd("tech").cd(".."));
 	REQUIRE(path("media/../media/vids") == path("media/vids"));
 	REQUIRE(path("media/./vids") == path("media/vids"));
-	REQUIRE(path("media/./vids/.././vids/funny/./") == path("media/vids/funny"));
-	REQUIRE(path("media/game/run").cd("assets/tiles").cd("./base.json") == path("media/game/run/assets/tiles/base.json"));
-	REQUIRE(path("media/game/run/assets").cd("../").cd("../../") == path("media"));
+	REQUIRE(path("media/./vids/.././vids/funny/./") ==
+		path("media/vids/funny"));
+	REQUIRE(path("media/game/run").cd("assets/tiles").cd("./base.json") ==
+		path("media/game/run/assets/tiles/base.json"));
+	REQUIRE(path("media/game/run/assets").cd("../").cd("../../") ==
+		path("media"));
 	/*
 	 * Leading `../` cannot be simplified
 	 */
 	REQUIRE(path("../run") == path().cd("../").cd("run"));
 	REQUIRE(path("./") == path("media").cd("test").cd("../").cd("../"));
-	REQUIRE(path("./") == path("media").cd("test").cd("../").cd("..").cd("caca").cd("../../"));
+	REQUIRE(path("./") ==
+		path("media").cd("test").cd("../").cd("..").cd("caca").cd(
+			"../../"));
 	REQUIRE(path("./") == path("media").cd(".."));
 }
 
-TEST_CASE("`path` with absolute paths", "[path]") {
+TEST_CASE("`path` with absolute paths", "[path]")
+{
 	/*
 	 * WARNING: internally, the class does _not_
 	 * consider absolute/relative paths to be different in any way
@@ -49,6 +57,6 @@ TEST_CASE("`path` with absolute paths", "[path]") {
 	REQUIRE(path("/media/vids") == path("/media/vids").cd("tech").cd(".."));
 	REQUIRE(path("/media/../media/vids") == path("/media/vids"));
 	REQUIRE(path("/media/./vids") == path("/media/vids"));
-	REQUIRE(path("/media/./vids/.././vids/funny/./") == path("/media/vids/funny"));
-
+	REQUIRE(path("/media/./vids/.././vids/funny/./") ==
+		path("/media/vids/funny"));
 }

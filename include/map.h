@@ -36,6 +36,5 @@ struct Map {
 	static bool from_json(Map *map, const jdm::path &file);
 	static void build_verts(const Map *map,
 				std::vector<sf::VertexArray> *varrs);
-	static void build_bboxes(const Map *map,
-				sf::VertexArray *varr);
+	static void build_bboxes(const Map *map, sf::VertexArray *varr);
 };

@@ -6,16 +6,17 @@
 using namespace jdm;
 
 path::path()
-{}
+{
+}
 
-path::path(const std::string &dir)
-  : m_raw(dir)
+path::path(const std::string &dir) : m_raw(dir)
 {
 	make_parts();
 }
 
 path::~path()
-{}
+{
+}
 
 void path::make_parts()
 {
@@ -33,8 +34,8 @@ void path::make_parts()
 					m_parts.push_back(buf);
 				}
 			} else {
-				if ((buf == "." && m_parts.empty())
-				  || buf != ".") {
+				if ((buf == "." && m_parts.empty()) ||
+				    buf != ".") {
 					m_parts.push_back(buf);
 				}
 			}
@@ -52,7 +53,7 @@ void path::make_parts()
 		} else {
 			m_parts.push_back(buf);
 		}
-		
+
 		buf.clear();
 	}
 
@@ -90,11 +91,9 @@ std::string path::str() const
 		return std::string();
 	}
 
-	std::string res = std::accumulate(std::next(m_parts.begin()), m_parts.end(),
-			m_parts[0],
-			[](std::string a, std::string b) {
-				return a + '/' + b;
-			});
+	std::string res = std::accumulate(
+		std::next(m_parts.begin()), m_parts.end(), m_parts[0],
+		[](std::string a, std::string b) { return a + '/' + b; });
 	return res;
 }
 
@@ -108,7 +107,7 @@ const std::vector<std::string> &path::parts() const
 	return m_parts;
 }
 
-bool path::operator==(const path& right) const
+bool path::operator==(const path &right) const
 {
 	return str() == right.str();
 }

@@ -28,4 +28,6 @@ clean:
 	rm -f -r build
 format:
 	clang-format -i `find src -name '*.cpp'`
+	clang-format -i `find lib -name '*.cpp'`
+	clang-format -i `find lib -name '*.h'`
 	clang-format -i `find include -name '*.h'`

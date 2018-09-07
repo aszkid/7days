@@ -212,4 +212,3 @@ void Map::build_bboxes(const Map *map, sf::VertexArray *varr)
 		q[3].color = sf::Color::Red;
 	}
 }
-
