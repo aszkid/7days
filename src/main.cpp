@@ -3,6 +3,7 @@
 #include <vector>
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_sinks.h>
+#include <spdlog/fmt/ostr.h>
 #include <nlohmann/json.hpp>
 #include <SFML/Graphics.hpp>
 #define FMT_HEADER_ONLY
@@ -12,6 +13,11 @@
 #include "map.h"
 
 using json = nlohmann::json;
+
+std::ostream &operator<<(std::ostream &os, const jdm::path &c)
+{
+	return os << c.str();
+}
 
 int main(int argc, char **argv)
 {
@@ -23,7 +29,7 @@ int main(int argc, char **argv)
 	jdm::path path_prefix("../run");
 
 	console->info("Path prefix is `{}`", path_prefix.str());
-	console->info("Config file is `{}`", (path_prefix / "config.json").str());
+	console->info("Config file is `{}`", path_prefix / "config.json");
 
 	std::ifstream infile(prefix + "config.json");
 	if (!infile) {

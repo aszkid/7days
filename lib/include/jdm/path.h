@@ -33,6 +33,7 @@ namespace jdm {
 		 * Accessors
 		 */
 		std::string str() const;
+		operator std::string() const;
 		const std::vector<std::string> &parts() const;
 
 		/*

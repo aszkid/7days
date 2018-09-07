@@ -98,6 +98,11 @@ std::string path::str() const
 	return res;
 }
 
+path::operator std::string() const
+{
+	return str();
+}
+
 const std::vector<std::string> &path::parts() const
 {
 	return m_parts;
@@ -107,3 +112,5 @@ bool path::operator==(const path& right) const
 {
 	return str() == right.str();
 }
+
+std::ostream &operator<<(std::ostream &os, const path &c);
