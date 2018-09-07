@@ -191,3 +191,25 @@ void Map::build_verts(const Map *map, std::vector<sf::VertexArray> *varrs)
 		}
 	}
 }
+
+void Map::build_bboxes(const Map *map, sf::VertexArray *varr)
+{
+	varr->setPrimitiveType(sf::Quads);
+	varr->resize(4 * map->collision_rects.size());
+
+	for (size_t i = 0; i < map->collision_rects.size(); i++) {
+		sf::Vertex *q = &(*varr)[4 * i];
+		const CollisionRect &r = map->collision_rects[i];
+
+		q[0].position = r.pos;
+		q[1].position = r.pos + sf::Vector2f(r.size.x, 0);
+		q[2].position = r.pos + r.size;
+		q[3].position = r.pos + sf::Vector2f(0, r.size.y);
+
+		q[0].color = sf::Color::Red;
+		q[1].color = sf::Color::Red;
+		q[2].color = sf::Color::Red;
+		q[3].color = sf::Color::Red;
+	}
+}
+
