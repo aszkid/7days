@@ -23,11 +23,17 @@ void path::make_parts()
 				// need more data
 				continue;
 			} else if (buf == "..") {
-				// pop last dir
-				m_parts.pop_back();
-			} else if (buf != ".") {
-				// push buffer
-				m_parts.push_back(buf);
+				// pop last dir if inside path
+				if (!m_parts.empty()) {
+					m_parts.pop_back();
+				} else {
+					m_parts.push_back(buf);
+				}
+			} else {
+				if ((buf == "." && m_parts.empty())
+				  || buf != ".") {
+					m_parts.push_back(buf);
+				}
 			}
 
 			buf.clear();
@@ -45,6 +51,12 @@ void path::make_parts()
 		}
 		
 		buf.clear();
+	}
+
+	if (!m_raw.empty() && m_parts.empty()) {
+		// through path operations, we got to the the 'empty' path,
+		// but that is translated by `./`
+		m_parts.push_back(".");
 	}
 
 	m_raw.clear();
