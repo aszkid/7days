@@ -6,6 +6,8 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 
+#include <jdm/path.h>
+
 struct CollisionRect {
 	sf::Vector2f size;
 	sf::Vector2f pos;
@@ -31,10 +33,8 @@ struct Map {
 	/*
 	 * API
 	 */
-	static bool from_json(Map *map, const std::string prefix,
-			      const std::string file);
+	static bool from_json(Map *map, const jdm::path &file);
 	static void build_verts(const Map *map,
 				std::vector<sf::VertexArray> *varrs);
-	static void build_bboxes(const Map *map,
-				sf::VertexArray *varr);
+	static void build_bboxes(const Map *map, sf::VertexArray *varr);
 };

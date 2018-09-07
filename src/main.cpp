@@ -8,6 +8,7 @@
 #define FMT_HEADER_ONLY
 #include <fmt/format.h>
 
+#include <jdm/path.h>
 #include "map.h"
 
 using json = nlohmann::json;
@@ -18,9 +19,12 @@ int main(int argc, char **argv)
 	auto console = spdlog::stdout_logger_mt("console");
 	console->info("7 Days of Doom");
 
-	const std::string prefix = "../run/";
+	const jdm::path prefix("../run");
+	const jdm::path config = prefix / "config.json";
 
-	std::ifstream infile(prefix + "config.json");
+	console->info("Config file is `{}`", config);
+
+	std::ifstream infile(config);
 	if (!infile) {
 		console->error("Failed to open config file!");
 		return 1;
@@ -32,7 +36,7 @@ int main(int argc, char **argv)
 	int s_height = j["screen"]["height"];
 
 	sf::Font font;
-	if (!font.loadFromFile(prefix + "fonts/Roboto/Roboto-Regular.ttf")) {
+	if (!font.loadFromFile(prefix / "fonts/Roboto/Roboto-Regular.ttf")) {
 		console->error("Failed to open font file!");
 		return 1;
 	}
@@ -63,7 +67,7 @@ int main(int argc, char **argv)
 	// Load map -- simple raw data
 	//
 	Map map;
-	if (!Map::from_json(&map, prefix + "avalon/", "better_map.json"))
+	if (!Map::from_json(&map, prefix / "avalon/better_map.json"))
 		return 1;
 
 	// Create graphics representation
