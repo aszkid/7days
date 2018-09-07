@@ -8,13 +8,13 @@ catch_dir = $(CURDIR)/ext/catch-2.4.0
 cflags = -Wall -std=c++11
 
 .PHONY: clean format prebuild test
-all: prebuild build/7days
+all: prebuild build/lib_test build/7days
 prebuild:
 	mkdir -p build
 build/lib.o: lib/src/path.cpp
 	g++ -c $^ -o $@ ${cflags} -I$(CURDIR)/lib/include -I$(spdlog_dir)/include
 build/lib_test: build/lib.o lib/tests.cpp
-	g++ $^ -o $@ ${cflags} -I$(CURDIR)/lib/include -I$(catch_dir)/include
+	g++ $^ -o $@ ${cflags} -I$(CURDIR)/lib/include -I$(catch_dir)/include -I$(spdlog_dir)/include
 build/7days: build/lib.o src/main.cpp src/map.cpp
 	g++ $^ -o $@ ${cflags} -I$(CURDIR)/include -I$(CURDIR)/lib/include -I$(sfml_dir)/include -I$(json_dir)/include -I$(spdlog_dir)/include -I$(fmt_dir)/include -L$(sfml_dir)/lib $(sfml_libs)
 	chmod +x $@
