@@ -16,7 +16,7 @@ build/lib.o: lib/src/path.cpp
 build/lib_test: build/lib.o lib/tests.cpp
 	g++ $^ -o $@ ${cflags} -I$(CURDIR)/lib/include -I$(catch_dir)/include
 build/7days: build/lib.o src/main.cpp src/map.cpp
-	g++ $^ -o $@ ${cflags} -I$(CURDIR)/include -I$(sfml_dir)/include -I$(json_dir)/include -I$(spdlog_dir)/include -I$(fmt_dir)/include -L$(sfml_dir)/lib $(sfml_libs)
+	g++ $^ -o $@ ${cflags} -I$(CURDIR)/include -I$(CURDIR)/lib/include -I$(sfml_dir)/include -I$(json_dir)/include -I$(spdlog_dir)/include -I$(fmt_dir)/include -L$(sfml_dir)/lib $(sfml_libs)
 	chmod +x $@
 run: build/7days
 	cd build; \

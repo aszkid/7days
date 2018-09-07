@@ -24,6 +24,12 @@ namespace jdm {
 		path &cd(const std::string& dir);
 
 		/*
+		 * Functional 'modifiers'
+		 */
+		path operator/(const path &other) const;
+		path operator/(const std::string &other) const;
+
+		/*
 		 * Accessors
 		 */
 		std::string str() const;

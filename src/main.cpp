@@ -8,6 +8,7 @@
 #define FMT_HEADER_ONLY
 #include <fmt/format.h>
 
+#include <jdm/path.h>
 #include "map.h"
 
 using json = nlohmann::json;
@@ -19,6 +20,10 @@ int main(int argc, char **argv)
 	console->info("7 Days of Doom");
 
 	const std::string prefix = "../run/";
+	jdm::path path_prefix("../run");
+
+	console->info("Path prefix is `{}`", path_prefix.str());
+	console->info("Config file is `{}`", (path_prefix / "config.json").str());
 
 	std::ifstream infile(prefix + "config.json");
 	if (!infile) {

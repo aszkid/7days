@@ -1,5 +1,8 @@
 #include "jdm/path.h"
 
+#include <functional>
+#include <numeric>
+
 using namespace jdm;
 
 path::path()
@@ -69,15 +72,29 @@ path &path::cd(const std::string &dir)
 	return *this;
 }
 
+path path::operator/(const path &other) const
+{
+	path res(str());
+	res.cd(other.str());
+	return res;
+}
+
+path path::operator/(const std::string &other) const
+{
+	return *this / path(other);
+}
+
 std::string path::str() const
 {
-	std::string res;
-
-	for (const auto& part : m_parts) {
-		res.append(part);
-		res.push_back('/');
+	if (m_parts.empty()) {
+		return std::string();
 	}
 
+	std::string res = std::accumulate(std::next(m_parts.begin()), m_parts.end(),
+			m_parts[0],
+			[](std::string a, std::string b) {
+				return a + '/' + b;
+			});
 	return res;
 }
 
