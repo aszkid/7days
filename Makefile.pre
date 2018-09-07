@@ -12,7 +12,7 @@ all: prebuild build/7days
 prebuild:
 	mkdir -p build
 build/lib.o: lib/src/path.cpp
-	g++ -c $^ -o $@ ${cflags} -I$(CURDIR)/lib/include
+	g++ -c $^ -o $@ ${cflags} -I$(CURDIR)/lib/include -I$(spdlog_dir)/include
 build/lib_test: build/lib.o lib/tests.cpp
 	g++ $^ -o $@ ${cflags} -I$(CURDIR)/lib/include -I$(catch_dir)/include
 build/7days: build/lib.o src/main.cpp src/map.cpp

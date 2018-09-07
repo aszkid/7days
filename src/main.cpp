@@ -3,7 +3,6 @@
 #include <vector>
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_sinks.h>
-#include <spdlog/fmt/ostr.h>
 #include <nlohmann/json.hpp>
 #include <SFML/Graphics.hpp>
 #define FMT_HEADER_ONLY
@@ -14,10 +13,6 @@
 
 using json = nlohmann::json;
 
-std::ostream &operator<<(std::ostream &os, const jdm::path &c)
-{
-	return os << c.str();
-}
 
 int main(int argc, char **argv)
 {
@@ -25,13 +20,12 @@ int main(int argc, char **argv)
 	auto console = spdlog::stdout_logger_mt("console");
 	console->info("7 Days of Doom");
 
-	const std::string prefix = "../run/";
-	jdm::path path_prefix("../run");
+	const jdm::path prefix("../run");
+	const jdm::path config = prefix / "config.json";
 
-	console->info("Path prefix is `{}`", path_prefix.str());
-	console->info("Config file is `{}`", path_prefix / "config.json");
+	console->info("Config file is `{}`", config);
 
-	std::ifstream infile(prefix + "config.json");
+	std::ifstream infile(config);
 	if (!infile) {
 		console->error("Failed to open config file!");
 		return 1;
@@ -43,7 +37,7 @@ int main(int argc, char **argv)
 	int s_height = j["screen"]["height"];
 
 	sf::Font font;
-	if (!font.loadFromFile(prefix + "fonts/Roboto/Roboto-Regular.ttf")) {
+	if (!font.loadFromFile(prefix / "fonts/Roboto/Roboto-Regular.ttf")) {
 		console->error("Failed to open font file!");
 		return 1;
 	}
@@ -74,7 +68,7 @@ int main(int argc, char **argv)
 	// Load map -- simple raw data
 	//
 	Map map;
-	if (!Map::from_json(&map, prefix + "avalon/", "better_map.json"))
+	if (!Map::from_json(&map, prefix / "avalon/better_map.json"))
 		return 1;
 
 	// Create graphics representation

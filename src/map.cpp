@@ -66,11 +66,11 @@ bool load_layer(Map *m, const json &j)
 	return true;
 }
 
-bool Map::from_json(Map *m, const std::string prefix, const std::string file)
+bool Map::from_json(Map *m, const jdm::path &file)
 {
 	auto log = spdlog::get("console");
 
-	std::ifstream infile(prefix + file);
+	std::ifstream infile(file);
 	if (!infile) {
 		log->error("Failed to open map `{}`!", file);
 		return false;
@@ -101,7 +101,7 @@ bool Map::from_json(Map *m, const std::string prefix, const std::string file)
 	}
 
 	const std::string tset_image = tset["image"];
-	if (!m->tile_set.loadFromFile(prefix + tset_image)) {
+	if (!m->tile_set.loadFromFile(file / ("../" + tset_image))) {
 		log->error("Failed at loading tileset texture!");
 		return false;
 	}

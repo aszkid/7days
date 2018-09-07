@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <spdlog/fmt/ostr.h>
 
 namespace jdm {
 
@@ -51,3 +52,5 @@ namespace jdm {
 	};
 
 }
+
+std::ostream &operator<<(std::ostream &os, const jdm::path &c);
