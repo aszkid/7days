@@ -3,16 +3,27 @@ sfml_libs = -lsfml-graphics -lsfml-window -lsfml-system
 json_dir = $(CURDIR)/ext/nlohmann-json-3.1.2
 spdlog_dir = $(CURDIR)/ext/spdlog-1.1.0
 fmt_dir = $(CURDIR)/ext/fmt-5.1.0
+catch_dir = $(CURDIR)/ext/catch-2.4.0
 
-.PHONY: clean format
-all: build/7days
-build/7days: src/main.cpp src/map.cpp
+cflags = -Wall -std=c++11
+
+.PHONY: clean format prebuild test
+all: prebuild build/7days
+prebuild:
 	mkdir -p build
-	g++ $^ -o $@ -Wall -std=c++11 -I$(CURDIR)/include -I$(sfml_dir)/include -I$(json_dir)/include -I$(spdlog_dir)/include -I$(fmt_dir)/include -L$(sfml_dir)/lib $(sfml_libs)
+build/lib.o: lib/src/path.cpp
+	g++ -c $^ -o $@ ${cflags} -I$(CURDIR)/lib/include
+build/lib_test: build/lib.o lib/tests.cpp
+	g++ $^ -o $@ ${cflags} -I$(CURDIR)/lib/include -I$(catch_dir)/include
+build/7days: build/lib.o src/main.cpp src/map.cpp
+	g++ $^ -o $@ ${cflags} -I$(CURDIR)/include -I$(sfml_dir)/include -I$(json_dir)/include -I$(spdlog_dir)/include -I$(fmt_dir)/include -L$(sfml_dir)/lib $(sfml_libs)
 	chmod +x $@
 run: build/7days
 	cd build; \
 	  LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(sfml_dir)/lib ./7days
+test: build/lib_test
+	cd build; \
+	  ./lib_test
 clean:
 	rm -f -r build
 format:
