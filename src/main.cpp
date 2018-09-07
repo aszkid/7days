@@ -71,6 +71,8 @@ int main(int argc, char **argv)
 	std::vector<sf::VertexArray> varrs;
 	Map::build_verts(&map, &varrs);
 	console->info("Built {} varrs", varrs.size());
+	sf::VertexArray bboxes;
+	Map::build_bboxes(&map, &bboxes);
 
 	while (window.isOpen()) {
 		delta = clock.restart();
@@ -118,6 +120,10 @@ int main(int argc, char **argv)
 		for (const auto &varr : varrs) {
 			window.draw(varr, &map.tile_set);
 		}
+		/*
+		 * Draw bboxes
+		 */
+		window.draw(bboxes);
 
 		/*
 		 * Draw gui
