@@ -40,9 +40,9 @@ void path::make_parts()
 		handle_token(buf);
 	}
 
-	if (!m_raw.empty() && m_parts.empty()) {
+	if (!m_raw.empty() && m_parts.empty() && !is_absolute()) {
 		// through path operations, we got to the the 'empty' path,
-		// but that is translated by `./`
+		// but that is translated by `./` for non-absolute paths
 		m_parts.push_back(".");
 	}
 
@@ -65,7 +65,7 @@ bool path::handle_token(const std::string &tok)
 		}
 	} else if (tok == ".") {
 		// need `./`
-		if (m_parts.empty()) m_parts.push_back(tok);
+		if (m_parts.empty() && !is_absolute()) m_parts.push_back(tok);
 	} else {
 		m_parts.push_back(tok);
 	}
@@ -94,13 +94,12 @@ path path::operator/(const std::string &other) const
 
 std::string path::str() const
 {
-	if (m_parts.empty()) {
-		return std::string();
-	}
-
 	std::string res;
-	if (m_absolute)
-		res += "/";
+	if (m_absolute) res += "/";
+
+	if (m_parts.empty()) {
+		return res;
+	}
 
 	res += std::accumulate(
 		std::next(m_parts.begin()), m_parts.end(), m_parts[0],
@@ -112,6 +111,11 @@ std::string path::str() const
 path::operator std::string() const
 {
 	return str();
+}
+
+bool path::is_absolute() const
+{
+	return m_absolute;
 }
 
 const std::vector<std::string> &path::parts() const
