@@ -50,6 +50,7 @@ class path {
 
 	std::vector<std::string> m_parts;
 	std::string m_raw;
+	bool m_absolute;
 };
 }
 

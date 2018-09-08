@@ -20,6 +20,11 @@ path::~path()
 
 void path::make_parts()
 {
+	// should only run when creating path from zero
+	if (m_parts.empty())
+		m_absolute = (m_raw.find("/") == 0);
+
+
 	std::string buf;
 	for (const char c : m_raw) {
 		// handle separator
@@ -93,9 +98,14 @@ std::string path::str() const
 		return std::string();
 	}
 
-	std::string res = std::accumulate(
+	std::string res;
+	if (m_absolute)
+		res += "/";
+
+	res += std::accumulate(
 		std::next(m_parts.begin()), m_parts.end(), m_parts[0],
 		[](std::string a, std::string b) { return a + '/' + b; });
+
 	return res;
 }
 
