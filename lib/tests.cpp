@@ -41,14 +41,13 @@ TEST_CASE("`path` with relative paths", "[path]")
 	REQUIRE(path("./") == path("media").cd(".."));
 	REQUIRE(path("..") == path("media").cd("../.."));
 	REQUIRE(path(".././hello/./world/.././").str() == "../hello");
+
+	REQUIRE(path("media/run").is_absolute() == false);
+	REQUIRE(path("media").cd("/run") == path("/run"));
 }
 
 TEST_CASE("`path` with absolute paths", "[path]")
 {
-	/*
-	 * WARNING: internally, the class does _not_
-	 * consider absolute/relative paths to be different in any way
-	 */
 	using namespace jdm;
 
 	REQUIRE(path("/var/www") == path("/var").cd("www"));
@@ -61,4 +60,19 @@ TEST_CASE("`path` with absolute paths", "[path]")
 	REQUIRE(path("/media/./vids") == path("/media/vids"));
 	REQUIRE(path("/media/./vids/.././vids/funny/./") ==
 		path("/media/vids/funny"));
+	REQUIRE(path("/hello/world").str() == "/hello/world");
+
+	REQUIRE(path("/media").is_absolute() == true);
+	REQUIRE(path("/media").str() == "/media");
+	REQUIRE(path("/media").cd("..").is_absolute() == true);
+	REQUIRE(path("/").str() == "/");
+	REQUIRE(path("/media").cd("..") == path("/"));
+	REQUIRE(path("/media").cd("..").str() == "/");
+}
+
+TEST_CASE("absolute vs. relative paths", "[path]")
+{
+	using namespace jdm;
+
+	REQUIRE((path("media/data") == path("/media/data")) == false);
 }

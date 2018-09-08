@@ -35,6 +35,7 @@ class path {
 	std::string str() const;
 	operator std::string() const;
 	const std::vector<std::string> &parts() const;
+	bool is_absolute() const;
 
 	/*
 	 * Const operators
@@ -50,6 +51,7 @@ class path {
 
 	std::vector<std::string> m_parts;
 	std::string m_raw;
+	bool m_absolute;
 };
 }
 
