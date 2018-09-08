@@ -5,11 +5,11 @@
 
 using namespace jdm;
 
-path::path()
+path::path() : m_absolute(false)
 {
 }
 
-path::path(const std::string &dir) : m_raw(dir)
+path::path(const std::string &dir) : m_raw(dir), m_absolute(false)
 {
 	make_parts();
 }
@@ -20,9 +20,10 @@ path::~path()
 
 void path::make_parts()
 {
-	// should only run when creating path from zero
-	if (m_parts.empty())
-		m_absolute = (m_raw.find("/") == 0);
+	if (m_raw.find("/") == 0) {
+		m_absolute = true;
+		m_parts.clear();
+	}
 
 	std::string buf;
 	for (const char c : m_raw) {
