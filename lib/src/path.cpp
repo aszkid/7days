@@ -24,12 +24,12 @@ void path::make_parts()
 	if (m_parts.empty())
 		m_absolute = (m_raw.find("/") == 0);
 
-
 	std::string buf;
 	for (const char c : m_raw) {
 		// handle separator
 		if (c == '/') {
-			if (handle_token(buf)) buf.clear();
+			if (handle_token(buf))
+				buf.clear();
 		} else {
 			buf.push_back(c);
 		}
@@ -65,7 +65,8 @@ bool path::handle_token(const std::string &tok)
 		}
 	} else if (tok == ".") {
 		// need `./`
-		if (m_parts.empty() && !is_absolute()) m_parts.push_back(tok);
+		if (m_parts.empty() && !is_absolute())
+			m_parts.push_back(tok);
 	} else {
 		m_parts.push_back(tok);
 	}
@@ -95,15 +96,17 @@ path path::operator/(const std::string &other) const
 std::string path::str() const
 {
 	std::string res;
-	if (m_absolute) res += "/";
+	if (m_absolute)
+		res += "/";
 
 	if (m_parts.empty()) {
 		return res;
 	}
 
-	res += std::accumulate(
-		std::next(m_parts.begin()), m_parts.end(), m_parts[0],
-		[](std::string a, std::string b) { return a + '/' + b; });
+	res += std::accumulate(std::next(m_parts.begin()), m_parts.end(),
+			       m_parts[0], [](std::string a, std::string b) {
+				       return a + '/' + b;
+			       });
 
 	return res;
 }
@@ -125,7 +128,8 @@ const std::vector<std::string> &path::parts() const
 
 bool path::operator==(const path &right) const
 {
-	return (m_parts == right.parts()) && (is_absolute() == right.is_absolute());
+	return (m_parts == right.parts()) &&
+	       (is_absolute() == right.is_absolute());
 }
 
 std::ostream &operator<<(std::ostream &os, const path &c)
