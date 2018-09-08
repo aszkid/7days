@@ -1,0 +1,7 @@
+#Crear nova branca:
+1. `git checkout -b` + branch name
+2. Fer els canvis
+3. `git status`
+4. `git add` + file / `git remove` + file els fitxers que es volguin fer
+5. `git commit`
+6. `git push pol` + branch name
