@@ -46,6 +46,7 @@ class path {
 	 * Consumes `m_raw`
 	 */
 	void make_parts();
+	bool handle_token(const std::string &tok);
 
 	std::vector<std::string> m_parts;
 	std::string m_raw;

@@ -22,39 +22,17 @@ void path::make_parts()
 {
 	std::string buf;
 	for (const char c : m_raw) {
+		// handle separator
 		if (c == '/') {
-			if (buf.empty()) {
-				// need more data
-				continue;
-			} else if (buf == "..") {
-				// pop last dir if inside path
-				if (!m_parts.empty()) {
-					m_parts.pop_back();
-				} else {
-					m_parts.push_back(buf);
-				}
-			} else {
-				if ((buf == "." && m_parts.empty()) ||
-				    buf != ".") {
-					m_parts.push_back(buf);
-				}
-			}
-
-			buf.clear();
+			if (handle_token(buf)) buf.clear();
 		} else {
 			buf.push_back(c);
 		}
 	}
 
 	if (!buf.empty()) {
-		// non-slash terminated path
-		if (buf == "..") {
-			m_parts.pop_back();
-		} else {
-			m_parts.push_back(buf);
-		}
-
-		buf.clear();
+		// non-slash terminated
+		handle_token(buf);
 	}
 
 	if (!m_raw.empty() && m_parts.empty()) {
@@ -64,6 +42,30 @@ void path::make_parts()
 	}
 
 	m_raw.clear();
+}
+
+bool path::handle_token(const std::string &tok)
+{
+	if (tok.empty()) {
+		return false;
+	}
+
+	if (tok == "..") {
+		if (m_parts.empty()) {
+			// top-level `..` remains
+			m_parts.push_back(tok);
+		} else {
+			// go upstairs
+			m_parts.pop_back();
+		}
+	} else if (tok == ".") {
+		// need `./`
+		if (m_parts.empty()) m_parts.push_back(tok);
+	} else {
+		m_parts.push_back(tok);
+	}
+
+	return true;
 }
 
 path &path::cd(const std::string &dir)

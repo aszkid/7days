@@ -39,6 +39,8 @@ TEST_CASE("`path` with relative paths", "[path]")
 		path("media").cd("test").cd("../").cd("..").cd("caca").cd(
 			"../../"));
 	REQUIRE(path("./") == path("media").cd(".."));
+	REQUIRE(path("..") == path("media").cd("../.."));
+	REQUIRE(path(".././hello/./world/.././").str() == "../hello");
 }
 
 TEST_CASE("`path` with absolute paths", "[path]")
