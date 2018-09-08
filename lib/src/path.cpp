@@ -125,7 +125,7 @@ const std::vector<std::string> &path::parts() const
 
 bool path::operator==(const path &right) const
 {
-	return str() == right.str();
+	return (m_parts == right.parts()) && (is_absolute() == right.is_absolute());
 }
 
 std::ostream &operator<<(std::ostream &os, const path &c)

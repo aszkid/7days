@@ -66,3 +66,10 @@ TEST_CASE("`path` with absolute paths", "[path]")
 	REQUIRE(path("/media").cd("..") == path("/"));
 	REQUIRE(path("/media").cd("..").str() == "/");
 }
+
+TEST_CASE("absolute vs. relative paths", "[path]")
+{
+	using namespace jdm;
+
+	REQUIRE((path("media/data") == path("/media/data")) == false);
+}
