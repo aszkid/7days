@@ -33,6 +33,24 @@ bool Player::from_json(Player *p, const jdm::path &file)
 	return true;
 }
 
+void Player::build_player(Player *p)
+{
+	p -> sprite.setTexture(p -> texture);
+	p -> sprite.setPosition(p -> position);
+}
+
+void Player::move(Player* p, float x, float y, std::vector<CollisionRect> rect)
+{
+	sf::Vector2f newpos;
+	p -> position.x = p -> position.x + x;
+	p -> position.y = p -> position.y + y;
+	if(can_move(*p, rect) == false){
+	        p -> position.x = p -> position.x - x;
+	        p -> position.y = p -> position.y - y;
+	}
+	p -> sprite.setPosition(p -> position);
+}
+
 bool Player::can_move(Player p, std::vector<CollisionRect> rect) // S'ha de passar la posició on estarà, no en la que esta
 {
 	sf::Vector2f px_cords(p.position.x, p.position.x + p.size.x);
